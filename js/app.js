@@ -14,6 +14,26 @@ firebase.initializeApp(firebaseConfig);
 
 var db = firebase.firestore();
 
+// ดูสถานะการ login
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    //var displayName = user.displayName;
+    var email = user.email;
+    console.log(email + "signed in");
+    // var emailVerified = user.emailVerified;
+    // var photoURL = user.photoURL;
+    // var isAnonymous = user.isAnonymous;
+    // var uid = user.uid;
+    // var providerData = user.providerData;
+    // ...
+  } else {
+    console.log("sign out");
+    // User is signed out.
+    // ...
+  }
+});
+
 document.addEventListener('init', function (event) {
   var page = event.target;
 
@@ -42,21 +62,44 @@ document.addEventListener('init', function (event) {
     console.log("menuPage");
 
     $("#login").click(function () {
-      $("#content")[0].load("login.html");
-      $("#sidemenu")[0].close();
+      $("#content")[0].load("login.html");  
+      $("#sidemenu")[0].close();   
+    });
+
+    $("#logout").click(function () {
+      //firebase sign out
+      firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        $("#content")[0].load("login.html");  
+        $("#sidemenu")[0].close();   
+      }).catch(function(error) {
+        // An error happened.
+        console.log(error.message);
+      });
     });
 
     $("#home").click(function () {
-      $("#content")[0].load("home.html");
-      $("#sidemenu")[0].close();
+      $("#content")[0].load("home.html");  
+      $("#sidemenu")[0].close();   
     });
   }
 
   if (page.id === 'loginPage') {
     console.log("loginPage");
 
+    $("#signinbtn").click(function(){
+      var username = $("#username").val();
+      var password = $("#password").val();
+      firebase.auth().signInWithEmailAndPassword(username, password).catch(function(error) {
+        console.log("sdasd");
+        
+        console.log(error.message);
+      });
+
+    })
+
     $("#backhomebtn").click(function () {
-      $("#content")[0].load("home.html");
+      $("#content")[0].load("home.html");      
     });
   }
 });
