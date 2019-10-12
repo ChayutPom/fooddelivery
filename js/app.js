@@ -97,6 +97,10 @@ document.addEventListener('init', function (event) {
       });
 
     })
+    $("#signupbtn").click(function(){
+      $("#content")[0].load("signup.html");  
+      $("#sidemenu")[0].close(); 
+    })
 
     $("#backhomebtn").click(function () {
       $("#content")[0].load("home.html");      
