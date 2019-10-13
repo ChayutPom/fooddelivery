@@ -83,7 +83,7 @@ document.addEventListener('init', function (event) {
       $("#sidemenu")[0].close();   
     });
   }
-
+//======login=========
   if (page.id === 'loginPage') {
     console.log("loginPage");
 
@@ -106,4 +106,40 @@ document.addEventListener('init', function (event) {
       $("#content")[0].load("home.html");      
     });
   }
+
+
+//------regis---------
+if (page.id === 'signUpPage') {
+  $("#signupbtn").click(function(){
+    console.log("ssssss")
+    db.collection("users").doc().set({
+      firstname: document.getElementById('fname').value,
+    lastname: document.getElementById('lastname').value,
+    email: document.getElementById('email').value,
+    password: document.getElementById('password').value,
+    conpassword: document.getElementById('conpassword').value,
+    phone: document.getElementById('phone').value
+
+  })
+  .then(function() {
+      console.log("Document successfully written!");
+  })
+  .catch(function(error) {
+      console.error("Error writing document: ", error);
+  });
+  firebase.auth().createUserWithEmailAndPassword(email,password).catch(function(error) {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    if(errorCode === 'auth/weak-password'){
+      alert('The password is too weak')
+    }else{
+      alert(errorMessage);
+    }
+});
+
+});
+$("#backhomebtn").click(function () {
+  $("#content")[0].load("home.html");      
+});
+}
 });
