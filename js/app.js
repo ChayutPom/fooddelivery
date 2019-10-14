@@ -130,7 +130,6 @@ document.addEventListener('init', function (event) {
       var username = $("#username").val();
       var password = $("#password").val();
       firebase.auth().signInWithEmailAndPassword(username, password).catch(function (error) {
-        console.log("sdasd");
 
         console.log(error.message);
       });
@@ -167,7 +166,7 @@ document.addEventListener('init', function (event) {
         .catch(function (error) {
           console.error("Error writing document: ", error);
         });
-        
+
       var email = document.getElementById('email').value;
       var password = document.getElementById('password').value;
       firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
@@ -201,18 +200,23 @@ document.addEventListener('init', function (event) {
             <div class="list-item__title">${doc.data().nameMenu}</div>
             <div class="list-item__subtitle">${doc.data().price} ฿</div>
           </div>
-          <div class="list-item__right">
-                <button class="fab fab--mini"><i class="zmdi zmdi-plus"></i></button>
+          <div id="plus" class="list-item__right">
+                <button  class="fab fab--mini"><i class="zmdi zmdi-plus"></i></button>
           </div>
         </li>
-      
-        
       </ul>`
         $("#select").append(item);
       });
+      $("#select").click(function () {
+        console.log('ddd');
+        
+        var x = document.getElementById("cart");
+      x.style.display = "";
+      });
     });
+    
     $("#backhomebtn").click(function () {
-      $("#content")[0].load("food.html");
+      $("#content")[0].load("home.html");
     });
   }
 });
