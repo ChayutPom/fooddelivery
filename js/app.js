@@ -134,6 +134,27 @@ document.addEventListener('init', function (event) {
         console.log(error.message);
       });
 
+      $("#google").click(function () {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        // ...
+        $("#content")[0].load("home.html");
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+        firebase.auth().signInWithRedirect(provider);
+      });
+      });
     })
     $("#signupbtn").click(function () {
       $("#content")[0].load("signup.html");
@@ -186,7 +207,7 @@ document.addEventListener('init', function (event) {
   }
  
 
-//==============selectMenu
+//==============selectMenu================
 
   if (page.id === 'selectMenu') {
     db.collection("menu").get().then((querySnapshot) => {
@@ -223,7 +244,9 @@ document.addEventListener('init', function (event) {
     });
   }
 
-  if (page.id === 'selectMenu') {
-  
+  if (page.id === 'orderPage') {
+    $("#backhomebtn").click(function () {
+      $("#content")[0].load("foodmenu.html");
+    });
   }
 });
