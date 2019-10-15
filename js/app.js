@@ -218,5 +218,12 @@ document.addEventListener('init', function (event) {
     $("#backhomebtn").click(function () {
       $("#content")[0].load("home.html");
     });
+    $("#cart").click(function () {
+      $("#content")[0].load("order.html");
+    });
+  }
+
+  if (page.id === 'selectMenu') {
+  
   }
 });
