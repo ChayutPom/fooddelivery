@@ -60,7 +60,10 @@ document.addEventListener('init', function (event) {
       
     });
     
-    
+    $("#backhomebtn").click(function () {
+      $("#content")[0].load("home.html");
+
+    });
   } else if (page.id === 'page2') {
     console.log(page.data.idMenu);
     
