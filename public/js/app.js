@@ -326,13 +326,13 @@ document.addEventListener('init', function (event) {
 });
 function myDem(q) {
   console.log(q);
-  arrayMenu.splice(q, 1);
-
+  arrayCount.splice(q,1,parseInt(arrayCount[q])-1);
+  
  }
  function myDep(p) {
   console.log(p);
-
     arrayCount.splice(p,1,parseInt(arrayCount[p])+1);
+    
  }
  
 function myFunction(idRes) {
