@@ -34,16 +34,24 @@ firebase.auth().onAuthStateChanged(function (user) {
   }
 });
 
+var arrayMenu = [];
+var arrayCount = [];
+var arrayPrice = [];
+var arrayNum =[];
+a=0;
+
+
 document.addEventListener('init', function (event) {
   var page = event.target;
 
 
   if (page.id === 'page1') {
+    //=====================restarant=========================================
     db.collection("restaurant").get().then(function (querySnapshot)  {
       querySnapshot.forEach(function (doc)  {
         
         var item = `<ul class="list list--inset"  >
-      <li id="selectRestaurant" onclick="myFunction('${doc.data().idRestaurant}')"  class="list-item list--inset__item list-item--chevron list-item--tappable" style="height: 100px">
+      <li  id="selectRestaurant" onclick="myFunction('${doc.data().idRestaurant}')"  class="list-item list--inset__item list-item--chevron list-item--tappable" style="height: 100px">
       <div class="list-item__left" >
         <img class="list-item__thumbnail" src="${doc.data().picture}">
       </div>
@@ -54,11 +62,9 @@ document.addEventListener('init', function (event) {
       <div class="list-item__right" style="margin-right: 20px">Menu</div>
     </li></ul>` 
         $("#res").append(item);    
-
-        
-      });
-      
+      });    
     });
+
     
     $("#backhomebtn").click(function () {
       $("#content")[0].load("home.html");
@@ -66,7 +72,23 @@ document.addEventListener('init', function (event) {
     });
   } else if (page.id === 'page2') {
     console.log(page.data.idMenu);
-    
+    db.collection("restaurant").where("idRestaurant", "==", page.data.idMenu )
+    .get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        var item = `<ons-list-item>
+        <div class="left" >
+              <img style="height:100px; width:100px" class="list-item__thumbnail" src="${doc.data().picture}">
+        </div>
+        <div class="center" style="margin-left: 25px">
+        ${doc.data().nameRestaurant}<br>FreeDelivery
+        </div>
+        <div class="right">4.6 ★<br>(30)</div>
+      </ons-list-item>`
+        $("#logo").append(item);
+      });
+ 
+    });
+
     db.collection("menu").where("idMenu", "==", page.data.idMenu )
     .get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -79,21 +101,16 @@ document.addEventListener('init', function (event) {
             <div class="list-item__title">${doc.data().nameMenu}</div>
             <div class="list-item__subtitle">${doc.data().price} ฿</div>
           </div>
-          <div id="plus" class="list-item__right">
+          <div onclick="cart('${doc.data().nameMenu}','${doc.data().price}','${doc.data().num}')"  id="plus" class="list-item__right">
                 <button  class="fab fab--mini"><i class="zmdi zmdi-plus"></i></button>
           </div>
         </li>
       </ul>`
         $("#select").append(item);
       });
-      $("#select").click(function () {
-        console.log('ddd');
-        
-        var x = document.getElementById("cart");
-      x.style.display = "";
-      });
+ 
     });
-    // page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+
   }
 
 
@@ -107,17 +124,31 @@ document.addEventListener('init', function (event) {
     });
     //=============category=============
     $('#category').click(function () {
-      content.load('food.html');
-      
-              
-          
+      content.load('food.html');    
         });  
         $("#backhomebtn").click(function () {
           $("#content")[0].load("home.html");
 
         });
         
-    
+    //========category========================
+    $("#category").empty();
+    db.collection("category").get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        var item = `
+        <ons-row class="category" >
+            <ons-col modifier="nodivider"  >
+                <div class="category_header" id="category" style="background-image: url('${doc.data().pic}')">
+                    <figure class="category_thumbnail">
+                        <div class="category_title" style="text-shadow: 3px 2px #006400;" id="Category_1_name">${doc.data().name}</div>
+                    </figure>
+                </div>
+            </ons-col>
+        </ons-row>`
+        $("#category").append(item);
+      });
+    });
+
     //========recomended========================
     $("#carousel").empty();
     db.collection("recomentdet").get().then((querySnapshot) => {
@@ -250,9 +281,32 @@ document.addEventListener('init', function (event) {
 
 
   if (page.id === 'orderPage') {
-    $("#backhomebtn").click(function () {
-      $("#content")[0].load("foodmenu.html");
-    });
+   console.log("orderPage");
+  //  db.collection("cart").get().then(function (querySnapshot)  {
+  //   querySnapshot.forEach(function (doc)  {
+      for (i = 0; i < arrayMenu.length; i++) {
+
+        var item = `<ons-row>
+        <ons-col width="200px">${arrayMenu[i]}</ons-col>
+        <ons-col>${arrayPrice[i]}</ons-col>
+        <ons-col>${arrayCount[i]}</ons-col> 
+        <ons-col><ons-icon ><i class="far fa-minus-square"></i></ons-icon></ons-col>  
+        </ons-row>` 
+      
+     
+      $("#order").append(item);    
+      }
+  //   });    
+
+  $("#pay").click(function () {
+    document.querySelector('#myNavigator').pushPage('home.html');
+    
+  });
+  $("#cancle").click(function () {
+    
+    document.querySelector('#myNavigator').pushPage('home.html');
+    // $("#content")[0].load("home.html");
+  });
   }
 });
 
@@ -264,5 +318,42 @@ function myFunction(idRes) {
 
   
   document.querySelector('#myNavigator').pushPage('page2.html', {data: {idMenu: idRes}});
-// };
+
 }
+
+
+function cart(menu,price,count) {
+
+  console.log(menu,price,count);
+
+  var x = document.getElementById("cart");
+  x.style.display = "";
+  
+  var arraycart = arrayMenu.includes(menu);
+
+ 
+  
+  if(arraycart == false){
+    arrayMenu.push(menu);
+  arrayPrice.push(price);
+  arrayCount.push(count);
+  console.log(arrayMenu);
+  console.log(arrayPrice);
+  console.log(arrayCount);
+  arrayNum.push(a++);
+  console.log(arrayNum);
+  
+  }else if(arraycart == true){
+    
+  }
+
+  // db.collection("cart").add({
+  //   nameMenu: menu,
+  //   price:price,   
+  //   });
+    $("#cart").click(function () {
+      document.querySelector('#myNavigator').pushPage('order.html');
+    });
+
+ }
+ 
