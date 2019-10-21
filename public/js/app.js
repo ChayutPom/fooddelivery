@@ -35,7 +35,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 var arrayMenu = [];
-var arrayCount = [];
+var  arrayCount = [];
 var arrayPrice = [];
 var arrayNum =[];
 a=0;
@@ -332,7 +332,7 @@ function myDem(q) {
  function myDep(p) {
   console.log(p);
 
-    arrayCount.splice(p,2, 2);
+    arrayCount.splice(p,1,parseInt(arrayCount[p])+1);
  }
  
 function myFunction(idRes) {
