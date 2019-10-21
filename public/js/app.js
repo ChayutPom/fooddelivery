@@ -50,6 +50,14 @@ document.addEventListener('init', function (event) {
     db.collection("restaurant").get().then(function (querySnapshot)  {
       querySnapshot.forEach(function (doc)  {
         
+        var item = `` 
+        $("#cat").append(item);    
+      });    
+    });
+    //=====================restarant=========================================
+    db.collection("restaurant").get().then(function (querySnapshot)  {
+      querySnapshot.forEach(function (doc)  {
+        
         var item = `<ul class="list list--inset"  >
       <li  id="selectRestaurant" onclick="myFunction('${doc.data().idRestaurant}')"  class="list-item list--inset__item list-item--chevron list-item--tappable" style="height: 100px">
       <div class="list-item__left" >
@@ -68,8 +76,8 @@ document.addEventListener('init', function (event) {
     
     $("#backhomebtn").click(function () {
       $("#content")[0].load("home.html");
-
     });
+
   } else if (page.id === 'page2') {
     console.log(page.data.idMenu);
     db.collection("restaurant").where("idRestaurant", "==", page.data.idMenu )
@@ -110,7 +118,12 @@ document.addEventListener('init', function (event) {
       });
  
     });
+    $("#cart").click(function () {
+      document.querySelector('#myNavigator').pushPage('order.html');
 
+      // console.log(page);
+      // $("#content")[0].load("order.html");
+    });   
   }
 
 
@@ -289,34 +302,42 @@ document.addEventListener('init', function (event) {
         var item = `<ons-row>
         <ons-col width="200px">${arrayMenu[i]}</ons-col>
         <ons-col>${arrayPrice[i]}</ons-col>
+        <ons-col onclick="myDem(${arrayNum[i]})"><ons-icon ><i class="far fa-minus-square"></i></ons-icon></ons-col>
         <ons-col>${arrayCount[i]}</ons-col> 
-        <ons-col><ons-icon ><i class="far fa-minus-square"></i></ons-icon></ons-col>  
+        <ons-col onclick="myDep(${arrayNum[i]})"><ons-icon ><i class="far fa-plus-square"></i></ons-icon></ons-col>  
         </ons-row>` 
-      
      
       $("#order").append(item);    
       }
   //   });    
 
-  $("#pay").click(function () {
-    document.querySelector('#myNavigator').pushPage('home.html');
+  // $("#pay").click(function () {
+  //   document.querySelector('#myNavigator').pushPage('home.html');
     
-  });
-  $("#cancle").click(function () {
+  // });
+  // $("#cancle").click(function () {
     
-    document.querySelector('#myNavigator').pushPage('home.html');
-    // $("#content")[0].load("home.html");
-  });
+  //   // document.querySelector('#myNavigator').pushPage('home.html');
+  //   $("#content")[0].load("home.html");
+  // });
   }
+ 
+
 });
+function myDem(q) {
+  console.log(q);
+  arrayMenu.splice(q, 1);
 
+ }
+ function myDep(p) {
+  console.log(p);
 
-
+    arrayCount.splice(p,2, 2);
+ }
+ 
 function myFunction(idRes) {
   
- console.log(idRes);
-
-  
+ console.log(idRes);  
   document.querySelector('#myNavigator').pushPage('page2.html', {data: {idMenu: idRes}});
 
 }
@@ -344,6 +365,7 @@ function cart(menu,price,count) {
   console.log(arrayNum);
   
   }else if(arraycart == true){
+    console.log(menu);
     
   }
 
@@ -351,9 +373,8 @@ function cart(menu,price,count) {
   //   nameMenu: menu,
   //   price:price,   
   //   });
-    $("#cart").click(function () {
-      document.querySelector('#myNavigator').pushPage('order.html');
-    });
+ 
 
+  
  }
  
