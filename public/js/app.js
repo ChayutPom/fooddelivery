@@ -17,16 +17,10 @@ var db = firebase.firestore();
 // ดูสถานะการ login
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
-    // User is signed in.
-    //var displayName = user.displayName;
+
     var email = user.email;
     console.log(email + "signed in");
-    // var emailVerified = user.emailVerified;
-    // var photoURL = user.photoURL;
-    // var isAnonymous = user.isAnonymous;
-    // var uid = user.uid;
-    // var providerData = user.providerData;
-    // ...
+
   } else {
     console.log("sign out");
     // User is signed out.
@@ -39,7 +33,8 @@ var  arrayCount = [];
 var arrayPrice = [];
 var arrayNum =[];
 a=0;
-
+var total=[];
+var totalall=0;
 
 document.addEventListener('init', function (event) {
   var page = event.target;
@@ -118,12 +113,16 @@ document.addEventListener('init', function (event) {
       });
  
     });
+    var user = firebase.auth().currentUser;
     $("#cart").click(function () {
+      
+      if(user){
       document.querySelector('#myNavigator').pushPage('order.html');
-
-      // console.log(page);
-      // $("#content")[0].load("order.html");
+      }else{
+        ons.notification.alert("Please login")
+      }
     });   
+    
   }
 
 
@@ -294,45 +293,78 @@ document.addEventListener('init', function (event) {
 
 
   if (page.id === 'orderPage') {
-   console.log("orderPage");
-  //  db.collection("cart").get().then(function (querySnapshot)  {
-  //   querySnapshot.forEach(function (doc)  {
-      for (i = 0; i < arrayMenu.length; i++) {
+   console.log("orderPage"); 
+    var bar = `<ons-toolbar >
+    <div  class="left" id="backhomebtn">
+      <ons-back-button >Back</ons-back-button>
+    </div>
+  </ons-toolbar>`
+  $("#bar").append(bar); 
 
+      for (i = 0; i < arrayMenu.length; i++) {
+        
         var item = `<ons-row>
-        <ons-col width="200px">${arrayMenu[i]}</ons-col>
+        <ons-col width="150px">${arrayMenu[i]}</ons-col>
         <ons-col>${arrayPrice[i]}</ons-col>
         <ons-col onclick="myDem(${arrayNum[i]})"><ons-icon ><i class="far fa-minus-square"></i></ons-icon></ons-col>
         <ons-col>${arrayCount[i]}</ons-col> 
         <ons-col onclick="myDep(${arrayNum[i]})"><ons-icon ><i class="far fa-plus-square"></i></ons-icon></ons-col>  
-        </ons-row>` 
-     
-      $("#order").append(item);    
-      }
-  //   });    
+        <ons-col>${parseInt(arrayPrice[i])*parseInt(arrayCount[i])}</ons-col>       
+        </ons-row>
+        <ons-row></ons-row>` 
+        var arraycart2 = arrayMenu[i].includes(arrayMenu[i]);
 
-  // $("#pay").click(function () {
-  //   document.querySelector('#myNavigator').pushPage('home.html');
-    
-  // });
-  // $("#cancle").click(function () {
-    
-  //   // document.querySelector('#myNavigator').pushPage('home.html');
-  //   $("#content")[0].load("home.html");
-  // });
+        if(arraycart2 == false){
+          total.push(parseInt(arrayPrice[i])*parseInt(arrayCount[i]));
+        }else if(arraycart2 == true){
+          total.splice(i,1,parseInt(parseInt(arrayPrice[i])*parseInt(arrayCount[i])));
+        }
+      $("#order").append(item);          
+      console.log(total);
+      }
+
+      document.getElementById("demo2").innerHTML = total.reduce(myFunc);
+
+function myFunc(total, num) {
+  return total + num;
+}
+
+  $("#pay").click(function () {
+    ons.notification.alert("Pay with cash");
+    $('#myNavigator')[0].removePage('home.html')
+  });
+  $("#pay2").click(function () {
+    ons.notification.alert("Pay with paypal");
+    $('#myNavigator')[0].removePage('home.html')
+  })
+
+  $("#cancle").click(function () {
+    ons.notification.alert('Cancle!',$('#myNavigator')[0].removePage('home.html'));
+    document.querySelector('#myNavigator').pushPage('order.html');
+
+  });
   }
  
 
 });
+
 function myDem(q) {
   console.log(q);
-  arrayCount.splice(q,1,parseInt(arrayCount[q])-1);
-  
+
+   arrayCount.splice(q,1,parseInt(arrayCount[q])-1);
+   if(arrayCount[q] <= 0){
+    arrayMenu.splice(q, 1);
+    arrayCount.splice(q, 1);
+    arrayPrice.splice(q, 1);
+    total.splice(q, 1);
+    
+   }
+  $("#or").load("order.html");
  }
  function myDep(p) {
   console.log(p);
-    arrayCount.splice(p,1,parseInt(arrayCount[p])+1);
-    
+   arrayCount.splice(p,1,parseInt(arrayCount[p])+1);
+   $("#or").load("order.html");
  }
  
 function myFunction(idRes) {
@@ -341,8 +373,6 @@ function myFunction(idRes) {
   document.querySelector('#myNavigator').pushPage('page2.html', {data: {idMenu: idRes}});
 
 }
-
-
 function cart(menu,price,count) {
 
   console.log(menu,price,count);
@@ -351,30 +381,20 @@ function cart(menu,price,count) {
   x.style.display = "";
   
   var arraycart = arrayMenu.includes(menu);
-
- 
   
   if(arraycart == false){
-    arrayMenu.push(menu);
-  arrayPrice.push(price);
-  arrayCount.push(count);
-  console.log(arrayMenu);
-  console.log(arrayPrice);
-  console.log(arrayCount);
-  arrayNum.push(a++);
-  console.log(arrayNum);
-  
+
+      arrayMenu.push(menu);
+      arrayPrice.push(price);
+      arrayCount.push(count);
+      console.log(arrayMenu);
+      console.log(arrayPrice);
+      console.log(arrayCount);
+      arrayNum.push(a++);
+      console.log(arrayNum);
+
   }else if(arraycart == true){
-    console.log(menu);
     
   }
-
-  // db.collection("cart").add({
-  //   nameMenu: menu,
-  //   price:price,   
-  //   });
- 
-
-  
  }
  
