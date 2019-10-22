@@ -308,7 +308,7 @@ document.addEventListener('init', function (event) {
       $("#order").append(item);          
       }
 
-      document.getElementById("demo2").innerHTML = total.reduce(myFunc);
+      document.getElementById("demo2").innerHTML = "Total: "+total.reduce(myFunc);
 
 function myFunc(total, num) {
   return total + num;
