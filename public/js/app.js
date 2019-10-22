@@ -45,15 +45,8 @@ document.addEventListener('init', function (event) {
     db.collection("restaurant").get().then(function (querySnapshot)  {
       querySnapshot.forEach(function (doc)  {
         
-        var item = `` 
-        $("#cat").append(item);    
-      });    
-    });
-    //=====================restarant=========================================
-    db.collection("restaurant").get().then(function (querySnapshot)  {
-      querySnapshot.forEach(function (doc)  {
-        
-        var item = `<ul class="list list--inset"  >
+        var item = `
+        <ul class="list list--inset"  >
       <li  id="selectRestaurant" onclick="myFunction('${doc.data().idRestaurant}')"  class="list-item list--inset__item list-item--chevron list-item--tappable" style="height: 100px">
       <div class="list-item__left" >
         <img class="list-item__thumbnail" src="${doc.data().picture}">
@@ -74,7 +67,6 @@ document.addEventListener('init', function (event) {
     });
 
   } else if (page.id === 'page2') {
-    console.log(page.data.idMenu);
     db.collection("restaurant").where("idRestaurant", "==", page.data.idMenu )
     .get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -129,18 +121,16 @@ document.addEventListener('init', function (event) {
 
 
   if (page.id === 'homePage') {
-    console.log("homePage");
-
     $("#menubtn").click(function () {
       $("#sidemenu")[0].open();
     });
     //=============category=============
+    
     $('#category').click(function () {
-      content.load('food.html');    
+      $("#content")[0].load("food.html");   
         });  
         $("#backhomebtn").click(function () {
           $("#content")[0].load("home.html");
-
         });
         
     //========category========================
@@ -150,7 +140,7 @@ document.addEventListener('init', function (event) {
         var item = `
         <ons-row class="category" >
             <ons-col modifier="nodivider"  >
-                <div class="category_header" id="category" style="background-image: url('${doc.data().pic}')">
+                <div class="category_header" id="category"  style="background-image: url('${doc.data().pic}')">
                     <figure class="category_thumbnail">
                         <div class="category_title" style="text-shadow: 3px 2px #006400;" id="Category_1_name">${doc.data().name}</div>
                     </figure>
@@ -178,7 +168,6 @@ document.addEventListener('init', function (event) {
  
   
   if (page.id === 'menuPage') {
-    console.log("menuPage");
 
     $("#login").click(function () {
       $("#content")[0].load("login.html");
@@ -205,8 +194,6 @@ document.addEventListener('init', function (event) {
 
   //======login=========
   if (page.id === 'loginPage') {
-    console.log("loginPage");
-
     $("#signinbtn").click(function () {
       var username = $("#username").val();
       var password = $("#password").val();
@@ -253,7 +240,6 @@ document.addEventListener('init', function (event) {
   //------regis---------
   if (page.id === 'signUpPage') {
     $("#signupbtn").click(function () {
-      console.log("ssssss")
       db.collection("users").doc().set({
         firstname: document.getElementById('fname').value,
         lastname: document.getElementById('lastname').value,
@@ -293,7 +279,7 @@ document.addEventListener('init', function (event) {
 
 
   if (page.id === 'orderPage') {
-   console.log("orderPage"); 
+  
     var bar = `<ons-toolbar >
     <div  class="left" id="backhomebtn">
       <ons-back-button >Back</ons-back-button>
@@ -320,7 +306,6 @@ document.addEventListener('init', function (event) {
           total.splice(i,1,parseInt(parseInt(arrayPrice[i])*parseInt(arrayCount[i])));
         }
       $("#order").append(item);          
-      console.log(total);
       }
 
       document.getElementById("demo2").innerHTML = total.reduce(myFunc);
@@ -331,25 +316,47 @@ function myFunc(total, num) {
 
   $("#pay").click(function () {
     ons.notification.alert("Pay with cash");
-    $('#myNavigator')[0].removePage('home.html')
+    $('#myNavigator')[0].removePage('home.html');
+    a=0;
+    arrayMenu=[];
+    arrayMenu=[];
+    arrayCount=[];
+    arrayPrice=[];
+    total=[];
   });
   $("#pay2").click(function () {
     ons.notification.alert("Pay with paypal");
-    $('#myNavigator')[0].removePage('home.html')
+    $('#myNavigator')[0].removePage('home.html');
+    a=0;
+    arrayMenu=[];
+    arrayMenu=[];
+    arrayCount=[];
+    arrayPrice=[];
+    total=[];
   })
 
   $("#cancle").click(function () {
     ons.notification.alert('Cancle!',$('#myNavigator')[0].removePage('home.html'));
     document.querySelector('#myNavigator').pushPage('order.html');
+    a=0;
+    arrayMenu=[];
+    arrayMenu=[];
+    arrayCount=[];
+    arrayPrice=[];
+    total=[];
+ 
 
+  //   $('#myNavigator')[0].pushPage('home.html').then(function () {
+  //     $('#myNavigator')[0].removePage(0)
+  // })
   });
   }
  
 
 });
 
+
 function myDem(q) {
-  console.log(q);
 
    arrayCount.splice(q,1,parseInt(arrayCount[q])-1);
    if(arrayCount[q] <= 0){
@@ -362,20 +369,16 @@ function myDem(q) {
   $("#or").load("order.html");
  }
  function myDep(p) {
-  console.log(p);
    arrayCount.splice(p,1,parseInt(arrayCount[p])+1);
    $("#or").load("order.html");
  }
  
 function myFunction(idRes) {
   
- console.log(idRes);  
   document.querySelector('#myNavigator').pushPage('page2.html', {data: {idMenu: idRes}});
 
 }
 function cart(menu,price,count) {
-
-  console.log(menu,price,count);
 
   var x = document.getElementById("cart");
   x.style.display = "";
@@ -387,12 +390,7 @@ function cart(menu,price,count) {
       arrayMenu.push(menu);
       arrayPrice.push(price);
       arrayCount.push(count);
-      console.log(arrayMenu);
-      console.log(arrayPrice);
-      console.log(arrayCount);
       arrayNum.push(a++);
-      console.log(arrayNum);
-
   }else if(arraycart == true){
     
   }
