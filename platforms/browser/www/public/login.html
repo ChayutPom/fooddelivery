@@ -1,0 +1,70 @@
+  
+    <ons-page id="loginPage">
+    
+        <ons-toolbar >
+                <div  class="left" id="backhomebtn">
+                  <ons-back-button >Back</ons-back-button>
+                </div>
+              </ons-toolbar>
+
+
+              
+        <ons-navigator var="myNavigator" ng-controller="MasterController"
+        style="display:flex;background:url(images/background1.jpg) no-repeat center; background-size: cover;">
+        
+      <div style=" width: 350px;
+      background-color: aliceblue; margin-top: 70px; margin-left: 20px;margin-right: 20px;margin-bottom: 50px">
+            <div style="text-align: center;  ">
+                    <img style="width: 50%;border-radius: 50%;" src="images/logo11.png">
+                <div style="text-align: center">Login</div>
+            <p >
+                <ons-input id="username" placeholder="Username" modifier="underbar"></ons-input>
+            </p>
+
+            <p>
+                <ons-input id="password" placeholder="Password" type="password" modifier="underbar">
+                </ons-input>
+            </p>
+           
+           <ons-row ><div class="button_cont" style="margin-left: 50px;" id="signinbtn" align="center"><a class="example_d" target="_blank" rel="nofollow noopener">Sign in</a></div>
+            <div class="button_cont" id="signupbtn" style="margin-left: 55px;" align="center"><a class="example_d" target="_blank" rel="nofollow noopener">SignUp</a></div>
+        </ons-row>
+            <br>
+            <div class="button_cont" id="google" align="center"><a class="example_d" target="_blank" rel="nofollow noopener">Google</a></div>
+            <br>
+            
+                    
+           
+           
+        </div></div>
+    </ons-navigator>
+    <style>
+            .example_d {
+color: #20bf6b !important;
+text-transform: uppercase;
+background: #ffffff;
+padding: 10px;
+border: 3px solid #20bf6b !important;
+border-radius: 5px;
+display: inline-block;
+transition: all 0.3s ease 0s;
+}
+.example_d:hover {
+color: #494949 !important;
+border-radius: 50px;
+border-color: #494949 !important;
+transition: all 0.3s ease 0s;
+}
+            </style>
+</ons-page> 
+
+
+
+
+
+
+
+
+
+
+
